@@ -40,7 +40,6 @@ public class ShopController {
     //post
     @PostMapping("orders")
     public void addOrder(@RequestBody List<Integer> productIds) {
-        //List<Integer> prodIds = Arrays.asList(productIds);
         shopService.addOrder(productIds);
     }
 
@@ -60,8 +59,8 @@ public class ShopController {
     //Bonus 2. Erstelle einen Endpunkt, um Orders anzulegen / zu überschreiben
 
     @PostMapping("products")
-    public void insertProduct(@RequestBody Product product) {
-        //shopService.insertProduct(product);
+    public void addProduct(@RequestBody Product product) {
+        shopService.addProduct(product);
     }
 
     @DeleteMapping("products/{id}")

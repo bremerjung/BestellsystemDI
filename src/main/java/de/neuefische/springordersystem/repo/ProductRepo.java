@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @Repository
 public class ProductRepo {
 
-    private final Map<Integer, Product> products = Map.of(
+    private Map<Integer, Product> products = Map.of(
             1, new Product(1, "Apfel"),
             2, new Product(2, "Banane"),
             3, new Product(3, "Zitrone"),
@@ -28,5 +28,9 @@ public class ProductRepo {
 
     public List<Product> listProducts() {
         return new ArrayList<>(products.values());
+    }
+
+    public void addProduct(Product product) {
+        products.put(product.getId(), product);
     }
 }

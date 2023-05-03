@@ -53,6 +53,7 @@ class ShopServiceTest {
     @Test
     public void testAddOrder() {
         // given
+        String orderId = "4711";
         List<Integer> productIds = Arrays.asList(1,2,3);
         List<Product> mockProducts = Arrays.asList(
                 new Product(1, "Product 1"),
@@ -62,14 +63,17 @@ class ShopServiceTest {
         when(productRepo.getProduct(1)).thenReturn(mockProducts.get(0));
         when(productRepo.getProduct(2)).thenReturn(mockProducts.get(1));
         when(productRepo.getProduct(3)).thenReturn(mockProducts.get(2));
+        when(generateUUID.generateUUID()).thenReturn(orderId);
 
         // when
-        shopService.addOrder(productIds);
+        Order orderActual = shopService.addOrder(productIds);
 
         // then
+        assertEquals(orderId, orderActual.getId());
         verify(productRepo).getProduct(1);
         verify(productRepo).getProduct(2);
         verify(productRepo).getProduct(3);
+        verify(generateUUID).generateUUID();
         verify(orderRepo).addOrder(any(Order.class));
     }
 
