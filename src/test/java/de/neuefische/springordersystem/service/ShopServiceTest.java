@@ -18,7 +18,8 @@ class ShopServiceTest {
 
     ProductRepo productRepo = mock(ProductRepo.class);
     OrderRepo orderRepo = mock(OrderRepo.class);
-    ShopService shopService = new ShopService(productRepo, orderRepo);
+    GenerateUUID generateUUID = mock(GenerateUUID.class);
+    ShopService shopService = new ShopService(productRepo, orderRepo, generateUUID);
 
     @Test
     public void testGetProduct() {
@@ -52,7 +53,6 @@ class ShopServiceTest {
     @Test
     public void testAddOrder() {
         // given
-        int orderId = 4711;
         List<Integer> productIds = Arrays.asList(1,2,3);
         List<Product> mockProducts = Arrays.asList(
                 new Product(1, "Product 1"),
@@ -64,7 +64,7 @@ class ShopServiceTest {
         when(productRepo.getProduct(3)).thenReturn(mockProducts.get(2));
 
         // when
-        shopService.addOrder(orderId, productIds);
+        shopService.addOrder(productIds);
 
         // then
         verify(productRepo).getProduct(1);
@@ -76,7 +76,7 @@ class ShopServiceTest {
     @Test
     public void testGetOrder() {
         // given
-        int orderId = 4711;
+        String orderId = "4711";
         Order expectedOrder = new Order();
         when(orderRepo.getOrder(orderId)).thenReturn(expectedOrder);
 

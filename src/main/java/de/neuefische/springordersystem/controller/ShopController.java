@@ -33,15 +33,21 @@ public class ShopController {
     }
 
     @GetMapping("orders/{id}")
-    public Order getOrder(@PathVariable int id) {
+    public Order getOrder(@PathVariable String id) {
         return shopService.getOrder(id);
     }
 
     //post
-    @PostMapping("orders/{id}")
-    public void addOrder(@PathVariable int id, @RequestBody List<Integer> productIds) {
+    @PostMapping("orders")
+    public void addOrder(@RequestBody List<Integer> productIds) {
         //List<Integer> prodIds = Arrays.asList(productIds);
-        shopService.addOrder(id, productIds);
+        shopService.addOrder(productIds);
+    }
+
+    @PostMapping("orders/addOrder2")
+    public void addOrder2(@RequestBody Order order) {
+        //List<Integer> prodIds = Arrays.asList(productIds);
+        shopService.addOrder2(order);
     }
 
     //Bonus
