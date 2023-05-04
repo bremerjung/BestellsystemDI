@@ -39,8 +39,8 @@ public class ShopController {
 
     //post
     @PostMapping("orders")
-    public void addOrder(@RequestBody List<Integer> productIds) {
-        shopService.addOrder(productIds);
+    public Order addOrder(@RequestBody List<Integer> productIds) {
+        return shopService.addOrder(productIds);
     }
 
     @PostMapping("orders/addOrder2")
