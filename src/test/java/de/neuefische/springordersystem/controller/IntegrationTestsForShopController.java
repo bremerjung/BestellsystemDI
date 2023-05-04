@@ -3,6 +3,7 @@ package de.neuefische.springordersystem.controller;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.neuefische.springordersystem.model.Order;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -70,25 +71,21 @@ class IntegrationTestsForShopController {
     }
 
     @Test
-    void whenGetOrder_thenReturnOrder_AndStatusCode200() throws Exception {
+    void whenGetOrderById_thenReturn200OK_returnCorrectOrder() throws Exception {
         // test setup: add order
-        MvcResult postResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/orders")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/orders")
                         .contentType(MediaType.APPLICATION_JSON)
+                        // .contentType("application/json") // alternative Schreibweise
                         .content("[1]"))
                 .andReturn();
-        String jsonResponseBody = postResult.getResponse().getContentAsString();
+        String content = result.getResponse().getContentAsString();
         // test setup: extract id from created order
         String id = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(jsonResponseBody);
-            id = jsonNode.get("id").asText();
-            //System.out.println("ID: " + id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/" + id))
+            ObjectMapper objectMapper = new ObjectMapper();
+            Order order = objectMapper.readValue(content, Order.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/" + order.getId()))
                 .andExpect(status().isOk()).
                 andExpect(content().json("""
                         {
@@ -99,7 +96,7 @@ class IntegrationTestsForShopController {
                                 }
                             ]
                         }
-                        """)).andExpect(jsonPath("$.id").value(id));
+                        """)).andExpect(jsonPath("$.id").value(order.getId()));
     }
 
     @Test
